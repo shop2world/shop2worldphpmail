@@ -1,0 +1,81 @@
+<!--
+이 문서는 HTML5를 사용합니다.
+페이지 상단에 style.css 파일을 링크합니다.
+Google reCAPTCHA API를 사용합니다.
+FormSubmit 함수는 서브밋 이벤트를 처리하기 위해 실행됩니다.
+recaptcha-container div는 reCAPTCHA가 표시될 영역입니다.
+페이지 하단에서 reCAPTCHA API를 다시 로드하고 FormSubmit 함수가 호출될 때 reCAPTCHA 토큰을 얻어와 recaptchaResponse 필드에 할당합니다.
+FormSubmit 함수는 recaptchaResponse 필드에 토큰이 존재하는지 확인하고 없을 경우 경고창을 표시합니다.
+-->
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<link rel="stylesheet" href="style.css">
+		<script src="https://www.google.com/recaptcha/api.js?render=YOUR-SITE_KEY"></script>
+	<script type="text/javascript"> 
+	/* 서브밋 전에 리캡챠 체크 여부 를 확인합니다. */ 
+	function FormSubmit() { 
+		grecaptcha.ready(function() {
+			grecaptcha.execute('YOUR-SITE_KEY', {action: 'submit'}).then(function(token) {
+				var recaptchaResponse = document.getElementById('recaptchaResponse');
+				recaptchaResponse.value = token;
+			});
+		});
+
+		return true;
+	} 
+	</script>
+
+	</head>
+	<body>
+
+			
+<!-- Contact -->
+<section id="contact" class="main style3 secondary">
+	<div class="content container">
+		<header>
+			<h2>Contact</h2>
+		</header>
+		<div class="box container small">
+			<form method="post" action="server.php" onsubmit="return FormSubmit();">
+				<div class="row half">
+					<div class="6u"><input type="text" name="name" placeholder="Name" /></div>
+					<div class="6u"><input type="text" name="email" placeholder="Email" /></div>
+					<div class="12u"><textarea name="message" placeholder="Message" rows="6"></textarea></div>
+				</div>
+				<div class="row">
+					<div class="12u">
+						<ul class="actions">
+							<input type="submit" class="button" value="Send Message" />
+						</ul>
+					</div>
+				</div>
+				<input type="hidden" name="recaptcha_response" id="recaptchaResponse">
+			</form>
+			<div id="recaptcha-container"></div>
+		</div>
+	</div>
+</section>
+
+<script src="https://www.google.com/recaptcha/api.js?render=YOUR-SITE_KEY"></script>
+<script>
+grecaptcha.ready(function() {
+	grecaptcha.execute('YOUR-SITE_KEY', {action: 'submit'}).then(function(token) {
+		var recaptchaResponse = document.getElementById('recaptchaResponse');
+		recaptchaResponse.value = token;
+	});
+});
+
+function FormSubmit() { 
+	var recaptchaResponse = document.getElementById('recaptchaResponse').value;
+	if(!recaptchaResponse) {
+		alert("Please check the reCAPTCHA.");
+		return false;
+	}
+	return true;
+}
+</script>
+
+
+	</body>
+</html>
